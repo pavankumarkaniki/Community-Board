@@ -5,7 +5,8 @@ const postSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
+      maxlength: 100
     },
     description: {
       type: String,
@@ -13,7 +14,8 @@ const postSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -21,9 +23,7 @@ const postSchema = new mongoose.Schema(
       required: true
     }
   },
-  {
-    timestamps: true
-  }
+  { timestamps: true }
 );
 
 export default mongoose.model("Post", postSchema);

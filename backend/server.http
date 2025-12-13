@@ -1,0 +1,56 @@
+@baseUrl = http://localhost:5000
+
+### Health Check
+GET {{baseUrl}}/
+
+### Signup (run once)
+POST {{baseUrl}}/api/auth/signup
+Content-Type: application/json
+
+{
+  "name": "Pavan Kumar",
+  "email": "pavan@test.com",
+  "password": "123456"
+}
+
+### Login
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "pavan@test.com",
+  "password": "123456"
+}
+
+### Create Post
+# @name createPost
+POST {{baseUrl}}/api/posts
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "title": "First Community Post",
+  "description": "Created using server.http",
+  "category": "General"
+}
+
+### Get All Posts
+GET {{baseUrl}}/api/posts
+
+### Get Post By ID
+GET {{baseUrl}}/api/posts/{{createPost.response.body._id}}
+
+### Update Post
+PUT {{baseUrl}}/api/posts/{{createPost.response.body._id}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "title": "Updated Title",
+  "description": "Updated via server.http"
+}
+
+### Delete Post
+DELETE {{baseUrl}}/api/posts/{{createPost.response.body._id}}
+Authorization: Bearer {{login.response.body.token}}
