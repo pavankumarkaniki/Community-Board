@@ -15,19 +15,10 @@ export default function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
-        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
         <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
-
-        {/* Protected Route */}
-        <Route
-          path="/create"
-          element={user ? <CreatePost /> : <Navigate to="/login" />}
-        />
-
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/create" element={user ? <CreatePost /> : <Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
   );

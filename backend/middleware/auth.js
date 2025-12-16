@@ -1,21 +1,21 @@
 import jwt from "jsonwebtoken";
 
-const auth = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "No token, authorization denied" });
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // MUST contain id
-    next();
-  } catch (error) {
-    res.status(401).json({ message: "Token is not valid" });
-  }
+const getTokenFromCookie = (cookieHeader) => {
+  if (!cookieHeader) return null;
+  const token = cookieHeader
+    .split("; ")
+    .find(c => c.startsWith("token="));
+  return token?.split("=")[1];
 };
 
-export default auth;
+export const auth = (req, res, next) => {
+  const token = getTokenFromCookie(req.headers.cookie);
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
+
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).json({ message: "Invalid token" });
+  }
+};

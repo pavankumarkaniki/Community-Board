@@ -1,36 +1,47 @@
-import { useState, useContext } from "react";
-import axios from "axios";
-import { AuthContext } from "../context/AuthContext";
+import { useState } from "react";
+import API from "../services/api";
 import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
-  const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/posts", { title, description, category }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      navigate("/");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to create post");
-    }
+    await API.post("/posts", { title, description, category });
+    navigate("/");
   };
 
   return (
-    <div className="container">
-      <h2>Create Post</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} required />
-        <textarea placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} required />
-        <input type="text" placeholder="Category" value={category} onChange={e => setCategory(e.target.value)} required />
+    <div className="form-container">
+      <form onSubmit={submit}>
+        <h1 className="community-head-form">Create Post</h1>
+
+        <input
+          type="text"
+          placeholder="Post title (e.g. Need help with React)"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+
+        <textarea
+          placeholder="Write your post description here..."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+
+        <input
+          type="text"
+          placeholder="Category (Tech, Education, Jobs, etc.)"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          required
+        />
+
         <button type="submit">Create</button>
       </form>
     </div>
