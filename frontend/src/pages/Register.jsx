@@ -65,7 +65,7 @@ export default function Register() {
         {error && <p className="form-error">{error}</p>}
         {success && <p className="form-success">{success}</p>}
 
-        <button type="submit">Register</button>
+        <button type="submit">Signup</button>
       </form>
     </div>
   );

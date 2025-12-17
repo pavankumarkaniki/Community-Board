@@ -1,24 +1,29 @@
-import { useEffect, useState } from "react"; 
+import { useEffect, useState } from "react";
 import API from "../services/api";
-
+import PostCard from "../components/PostCard";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    API.get("/posts").then(res => setPosts(res.data));
+    API.get("/posts")
+      .then(res => setPosts(res.data))
+      .catch(err => console.error(err));
   }, []);
 
   return (
     <div className="community-container">
       <h1 className="community-head">Community Posts</h1>
-      {posts.map(post => (
-        <div key={post._id}>
-          <h3>{post.title}</h3>
-          <p>{post.description}</p>
-          <small>{post.userId?.name}</small>
-        </div>
-      ))}
+
+      <div className="posts-grid">
+        {posts.length === 0 ? (
+          <p className="empty-text">No posts yet</p>
+        ) : (
+          posts.map(post => (
+            <PostCard key={post._id} post={post} />
+          ))
+        )}
+      </div>
     </div>
   );
 }

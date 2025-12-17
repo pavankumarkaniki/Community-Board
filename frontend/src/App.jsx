@@ -24,7 +24,7 @@ export default function App() {
         />
 
         <Route
-          path="/register"
+          path="/signup"
           element={!user ? <Register /> : <Navigate to="/" />}
         />
 

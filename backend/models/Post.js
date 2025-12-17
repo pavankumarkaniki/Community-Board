@@ -2,26 +2,25 @@ import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-      maxlength: 100
-    },
-    description: {
-      type: String,
-      required: true
-    },
-    category: {
-      type: String,
-      required: true,
-      trim: true
-    },
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    category: { type: String, required: true },
+
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
-    }
+      required: true,
+    },
+
+    likes: {
+      type: Number,
+      default: 0,
+    },
+
+    votes: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

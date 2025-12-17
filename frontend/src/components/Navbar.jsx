@@ -9,7 +9,10 @@ export default function Navbar() {
     <nav>
       <div className="nav-left">
         <Link to="/">
-          <img className="community-icon" src="https://i.ibb.co/673W95V7/community-img.png" alt="community-icon" />
+          <div className="nav-left-container">
+            <img className="community-icon" src="https://i.ibb.co/673W95V7/community-img.png" alt="community-icon" />
+            <h1 className="community-board">COMMUNITY BOARD</h1>
+          </div>
         </Link> 
       </div>
 

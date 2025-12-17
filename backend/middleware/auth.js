@@ -8,7 +8,7 @@ const getTokenFromCookie = (cookieHeader) => {
   return token?.split("=")[1];
 };
 
-export const auth = (req, res, next) => {
+const auth = (req, res, next) => {
   const token = getTokenFromCookie(req.headers.cookie);
   if (!token) return res.status(401).json({ message: "Unauthorized" });
 
@@ -19,3 +19,5 @@ export const auth = (req, res, next) => {
     res.status(401).json({ message: "Invalid token" });
   }
 };
+
+export default auth
