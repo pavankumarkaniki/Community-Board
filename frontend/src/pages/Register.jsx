@@ -37,7 +37,7 @@ export default function Register() {
   return (
     <div className="form-container">
       <form onSubmit={submit}>
-        <h1 className="community-head-form">Register</h1>
+        <h1 className="community-head-form">Please Signup</h1>
 
         <input
           placeholder="Full Name"
@@ -65,7 +65,7 @@ export default function Register() {
         {error && <p className="form-error">{error}</p>}
         {success && <p className="form-success">{success}</p>}
 
-        <button type="submit">Signup</button>
+        <button type="submit">Sign up</button>
       </form>
     </div>
   );
