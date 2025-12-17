@@ -3,15 +3,35 @@ import API from "../services/api";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const submit = async (e) => {
     e.preventDefault();
-    await API.post("/auth/signup", { name, email, password });
-    navigate("/login");
+    setError("");
+    setSuccess("");
+
+    try {
+      await API.post("/auth/signup", {
+        name,
+        email,
+        password,
+      });
+
+      setSuccess("Registration successful! Redirecting to login...");
+      setTimeout(() => navigate("/login"), 1500);
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      setError(
+        err.response?.data?.message || "Registration failed. Try again."
+      );
+    }
   };
 
   return (
@@ -20,8 +40,7 @@ export default function Register() {
         <h1 className="community-head-form">Register</h1>
 
         <input
-          type="text"
-          placeholder="Enter your full name"
+          placeholder="Full Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -29,7 +48,7 @@ export default function Register() {
 
         <input
           type="email"
-          placeholder="Enter your email address"
+          placeholder="Email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -37,11 +56,14 @@ export default function Register() {
 
         <input
           type="password"
-          placeholder="Create a strong password"
+          placeholder="Create password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+ 
+        {error && <p className="form-error">{error}</p>}
+        {success && <p className="form-success">{success}</p>}
 
         <button type="submit">Register</button>
       </form>

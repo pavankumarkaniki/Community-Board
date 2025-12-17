@@ -6,14 +6,27 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");  
 
   const submit = async (e) => {
     e.preventDefault();
-    const res = await API.post("/auth/login", { email, password });
-    login(res.data);
-    navigate("/");
+    setError("");  
+
+    try {
+      const res = await API.post("/auth/login", {
+        email,
+        password,
+      });
+
+      login(res.data);
+      navigate("/");
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      setError("Invalid email or password");
+    }
   };
 
   return (
@@ -35,7 +48,8 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-        />
+        /> 
+        {error && <p className="form-error">{error}</p>}
 
         <button type="submit">Login</button>
       </form>

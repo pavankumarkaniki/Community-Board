@@ -236,6 +236,25 @@ form button:hover {
   }
 }
 
+.form-error {
+  color: #dc2626;  
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight:bold;
+  padding:;
+}
+
+.form-success {
+  color: #166534;  
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight:bold;
+
+}
+
+
 /* =========================
    DARK MODE
 ========================= */
@@ -325,6 +344,7 @@ form button:hover {
   /* Forms */
   form {
     padding: 1.2rem;
+    width:90%;
   }
 
   form input,
