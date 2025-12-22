@@ -1,7 +1,7 @@
 // routes/posts.js
 import express from "express";
 import Post from "../models/Post.js";
-import auth from "../middleware/optionalAuth.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
