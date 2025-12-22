@@ -1,28 +1,26 @@
+// routes/posts.js
 import express from "express";
-import {
-  createPost,
-  getPosts,
-  getPostById,
-  updatePost,
-  deletePost,
-  votePost,
-  likePost,
-  addComment,
-} from "../controllers/postControllers.js";
-import auth from "../middleware/auth.js";
+import Post from "../models/Post.js";
+import auth from "../middleware/optionalAuth.js";
 
 const router = express.Router();
 
-router.get("/", getPosts);
-router.get("/:id", getPostById);
+// GET all posts
+router.get("/", async (req, res) => {
+  res.json(await Post.find().sort({ createdAt: -1 }));
+});
 
-router.post("/", auth, createPost);
-router.put("/:id", auth, updatePost);
-router.delete("/:id", auth, deletePost);
-
-// NEW FEATURES
-router.post("/:id/vote", auth, votePost);
-router.post("/:id/like", auth, likePost);
-router.post("/:id/comment", auth, addComment);
+// POST new post (guest or logged-in)
+router.post("/", auth, async (req, res) => {
+  try {
+    const post = await Post.create({
+      ...req.body,
+      userId: req.user ? req.user.id : null,  
+    });
+    res.status(201).json(post);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 export default router;

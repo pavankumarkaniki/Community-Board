@@ -5,26 +5,6 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// REGISTER
-router.post("/signup", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-
-    const exists = await User.findOne({ email });
-    if (exists) {
-      return res.status(400).json({ message: "Email already exists" });
-    }
-
-    const hashed = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: hashed });
-
-    res.status(201).json({ message: "User created successfully" });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// LOGIN
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -45,10 +25,15 @@ router.post("/login", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res.setHeader(
-      "Set-Cookie",
-      `token=${token}; HttpOnly; Secure; SameSite=None; Path=/; Max-Age=604800`
-    );
+    // ✅ THIS IS WHERE YOUR CODE GOES
+    const isProduction = process.env.NODE_ENV === "production";
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: isProduction,                  
+      sameSite: isProduction ? "None" : "Lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     res.json({
       user: {
@@ -57,18 +42,10 @@ router.post("/login", async (req, res) => {
         email: user.email,
       },
     });
+
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
-});
-
-// LOGOUT
-router.post("/logout", (req, res) => {
-  res.setHeader(
-    "Set-Cookie",
-    "token=; HttpOnly; Secure; SameSite=None; Path=/; Max-Age=0"
-  );
-  res.json({ message: "Logged out successfully" });
 });
 
 export default router;

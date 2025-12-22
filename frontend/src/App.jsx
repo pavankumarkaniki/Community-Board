@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "./context/AuthContext";
+import { useAuth } from "./context/AuthContext";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -9,7 +8,7 @@ import CreatePost from "./pages/CreatePost";
 import Navbar from "./components/Navbar";
 
 export default function App() {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();  
 
   return (
     <>
